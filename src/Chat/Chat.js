@@ -27,13 +27,19 @@ class Chat extends Component {
     }, 1000);
   }
 
+  addMessage = (newMessage) => {
+    this.setState((prevState) => ({
+      messages: [...prevState.messages, newMessage],
+    }));
+  };
+
   render() {
     const { shop, messages } = this.state;
     return (
       <main className="Chat">
         <ChatHeader shop={shop} />
         <ChatBox messages={messages} />
-        <ChatInput />
+        <ChatInput addInputToMessage={this.addMessage} />
       </main>
     );
   }
