@@ -17,6 +17,7 @@ class Chat extends Component {
 
   componentDidMount() {
     const defaultMessage = answersData.find((answer) => answer.tags.includes('DEFAULT'));
+    console.log(answersData.flatMap((answer) => answer.tags));
     const messages = this.state.messages.concat(defaultMessage);
 
     setTimeout(() => {
@@ -27,10 +28,25 @@ class Chat extends Component {
     }, 1000);
   }
 
-  addMessage = (newMessage) => {
+  setMessage(newMessage) {
     this.setState((prevState) => ({
       messages: [...prevState.messages, newMessage],
     }));
+  }
+
+  getAutoResponse = async (text) => {
+    const tags = answersData.flatMap((answer) => answer.tags);
+    tags.forEach((tag) => {
+      if (text.includes(tag)) {
+        const answerMessage = answersData.find((answer) => answer.tags.includes(tag));
+        this.setMessage(answerMessage);
+      }
+    });
+  };
+
+  addMessage = (newMessage) => {
+    this.setMessage(newMessage);
+    this.getAutoResponse(newMessage.text);
   };
 
   render() {
